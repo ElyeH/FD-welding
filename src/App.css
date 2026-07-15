@@ -150,6 +150,28 @@
   border-color: transparent;
 }
 
+.btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.form-status {
+  font-size: 0.9rem;
+  margin: 0;
+  padding: 0.75rem 1rem;
+  border-radius: 4px;
+}
+
+.form-status--success {
+  color: #1a7f37;
+  background: rgba(26, 127, 55, 0.1);
+}
+
+.form-status--error {
+  color: #c0362c;
+  background: rgba(192, 54, 44, 0.1);
+}
+
 /* ── Footer ── */
 .footer {
   background: var(--color-dark);

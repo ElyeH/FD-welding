@@ -1,6 +1,43 @@
+import { useState } from 'react'
 import './App.css'
 
+const EMPTY_FORM = { name: '', email: '', message: '' }
+
 function App() {
+  const [form, setForm] = useState(EMPTY_FORM)
+  const [status, setStatus] = useState('idle') // idle | sending | success | error
+  const [errorMessage, setErrorMessage] = useState('')
+
+  function handleChange(e) {
+    const { name, value } = e.target
+    setForm((prev) => ({ ...prev, [name]: value }))
+  }
+
+  async function handleSubmit(e) {
+    e.preventDefault()
+    setStatus('sending')
+    setErrorMessage('')
+
+    try {
+      const res = await fetch('/api/contact', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(form),
+      })
+      const data = await res.json().catch(() => ({}))
+
+      if (!res.ok) {
+        throw new Error(data.error || 'Something went wrong. Please try again.')
+      }
+
+      setStatus('success')
+      setForm(EMPTY_FORM)
+    } catch (err) {
+      setStatus('error')
+      setErrorMessage(err.message)
+    }
+  }
+
   return (
     <div className="app">
       <header className="header">
@@ -46,11 +83,43 @@ function App() {
 
         <section id="contact" className="section">
           <h2>Contact Us</h2>
-          <form className="form">
-            <input type="text" placeholder="Your Name" required />
-            <input type="email" placeholder="Your Email" required />
-            <textarea placeholder="Your Message" rows="5" required></textarea>
-            <button type="submit" className="btn">Send Message</button>
+          <form className="form" onSubmit={handleSubmit}>
+            <input
+              type="text"
+              name="name"
+              placeholder="Your Name"
+              value={form.name}
+              onChange={handleChange}
+              required
+            />
+            <input
+              type="email"
+              name="email"
+              placeholder="Your Email"
+              value={form.email}
+              onChange={handleChange}
+              required
+            />
+            <textarea
+              name="message"
+              placeholder="Your Message"
+              rows="5"
+              value={form.message}
+              onChange={handleChange}
+              required
+            ></textarea>
+            <button type="submit" className="btn" disabled={status === 'sending'}>
+              {status === 'sending' ? 'Sending...' : 'Send Message'}
+            </button>
+
+            {status === 'success' && (
+              <p className="form-status form-status--success">
+                Thanks! Your message has been sent — we'll be in touch soon.
+              </p>
+            )}
+            {status === 'error' && (
+              <p className="form-status form-status--error">{errorMessage}</p>
+            )}
           </form>
         </section>
       </main>
