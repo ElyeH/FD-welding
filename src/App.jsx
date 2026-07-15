@@ -1,5 +1,38 @@
 import { useState } from 'react'
 import './App.css'
+import kitchenHood from './assets/gallery/kitchen-hood-fabrication.jpg'
+import handrailFrame from './assets/gallery/handrail-frame-install.jpg'
+import stairwellWelding from './assets/gallery/stairwell-rail-welding.jpg'
+import demoWall from './assets/gallery/demo-concrete-wall.jpg'
+import glassStairRailing from './assets/gallery/glass-stair-railing-finished.jpg'
+
+const GALLERY = [
+  {
+    src: glassStairRailing,
+    alt: 'Finished glass and stainless steel staircase railing in an office lobby',
+    caption: 'Glass & stainless stair railing — commercial lobby',
+  },
+  {
+    src: stairwellWelding,
+    alt: 'Welder fabricating a stainless steel handrail on a staircase',
+    caption: 'On-site handrail welding',
+  },
+  {
+    src: handrailFrame,
+    alt: 'Stainless steel handrail frame staged for installation',
+    caption: 'Custom handrail frame — fit-up',
+  },
+  {
+    src: kitchenHood,
+    alt: 'Fabricating a stainless steel commercial kitchen hood surround',
+    caption: 'Stainless kitchen hood fabrication',
+  },
+  {
+    src: demoWall,
+    alt: 'Demolition of a concrete block wall ahead of a fabrication project',
+    caption: 'Site demo & prep work',
+  },
+]
 
 const EMPTY_FORM = { name: '', email: '', message: '' }
 
@@ -46,6 +79,7 @@ function App() {
           <ul className="nav-links">
             <li><a href="#services">Services</a></li>
             <li><a href="#about">About</a></li>
+            <li><a href="#work">Our Work</a></li>
             <li><a href="#contact">Contact</a></li>
           </ul>
         </nav>
@@ -79,6 +113,18 @@ function App() {
         <section id="about" className="section section--alt">
           <h2>About Us</h2>
           <p>With years of experience in the industry, FD Welding delivers reliable, high-quality metalwork for residential, commercial, and industrial clients.</p>
+        </section>
+
+        <section id="work" className="section">
+          <h2>Our Work</h2>
+          <div className="gallery">
+            {GALLERY.map((item) => (
+              <figure className="gallery-item" key={item.src}>
+                <img src={item.src} alt={item.alt} loading="lazy" />
+                <figcaption>{item.caption}</figcaption>
+              </figure>
+            ))}
+          </div>
         </section>
 
         <section id="contact" className="section">
