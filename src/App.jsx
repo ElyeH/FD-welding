@@ -36,6 +36,11 @@ const GALLERY = [
 
 const EMPTY_FORM = { name: '', email: '', message: '', company: '' }
 
+// In dev, Vite proxies '/api' to the local backend, so an empty base works.
+// In production the frontend and backend are on different domains/hosts,
+// so the deployed backend URL must be baked in at build time.
+const API_BASE = import.meta.env.VITE_API_URL || ''
+
 function App() {
   const [form, setForm] = useState(EMPTY_FORM)
   const [status, setStatus] = useState('idle') // idle | sending | success | error
@@ -61,7 +66,7 @@ function App() {
     setErrorMessage('')
 
     try {
-      const res = await fetch('/api/contact', {
+      const res = await fetch(`${API_BASE}/api/contact`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(form),

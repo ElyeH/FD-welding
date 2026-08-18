@@ -48,8 +48,19 @@ Until SMTP is configured, the API returns a clear error instead of failing silen
 - **Security headers** — `helmet` is applied to all responses.
 - Keep `.env` out of git (already covered by `.gitignore`) and rotate the SMTP app password if it's ever exposed.
 
-## Deploying
+## Deploying the backend (Render)
 
-- Build the frontend with `npm run build` (outputs to `dist/`) and upload via FTP/hosting of choice.
-- Run the backend (`server/`) on any Node host, with the same `.env` variables set as environment variables (including `CORS_ORIGIN` pointed at your live frontend domain).
-- Point the frontend's `/api` requests at the deployed backend URL (update the proxy target or add a reverse proxy in production).
+A `render.yaml` blueprint is included so Render can set the service up automatically.
+
+1. Push this repo to GitHub (already done — `origin` is set).
+2. On [render.com](https://render.com), sign up/log in (free, no card required), then **New +** → **Blueprint**, connect the GitHub account, and select this repo. Render will read `render.yaml` and propose a `a-to-z-weld-and-build-server` web service using the `server/` folder.
+   - No `render.yaml`/blueprints available? Create it manually instead: **New +** → **Web Service** → this repo → **Root Directory**: `server`, **Build Command**: `npm install`, **Start Command**: `npm start`, **Plan**: Free.
+3. Fill in the env vars Render prompts for: `SMTP_USER`, `SMTP_PASS` (the Gmail App Password), and `CORS_ORIGIN` (your live frontend domain, e.g. `https://atozweldandbuild.com` — can be filled in after step 5 once that domain is known).
+4. Deploy. Render gives you a URL like `https://a-to-z-weld-and-build-server.onrender.com`.
+   - Free tier spins down after ~15 minutes of inactivity — the first request after a lull takes 30-50s to wake back up. Fine for a low-traffic contact form.
+
+## Deploying the frontend
+
+1. Copy `.env.example` to `.env.production` at the repo root and set `VITE_API_URL` to the Render URL from above.
+2. `npm run build` (outputs to `dist/`) and upload `dist/` via FTP/hosting of choice.
+3. Once the frontend's live domain is known, set `CORS_ORIGIN` on the Render service to that domain so the backend only accepts requests from it.
