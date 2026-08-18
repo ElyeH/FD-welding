@@ -1,5 +1,5 @@
 {
-  "name": "fd-welding-server",
+  "name": "a-to-z-weld-and-build-server",
   "private": true,
   "version": "0.1.0",
   "type": "module",
@@ -12,6 +12,8 @@
     "cors": "^2.8.5",
     "dotenv": "^16.4.5",
     "express": "^4.19.2",
-    "nodemailer": "^6.9.14"
+    "express-rate-limit": "^8.6.2",
+    "helmet": "^8.3.0",
+    "nodemailer": "^9.0.5"
   }
 }

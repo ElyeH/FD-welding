@@ -1,14 +1,51 @@
 import express from "express";
 import cors from "cors";
+import helmet from "helmet";
+import rateLimit from "express-rate-limit";
 import nodemailer from "nodemailer";
 import "dotenv/config";
 
 const app = express();
-app.use(cors());
-app.use(express.json());
+
+// Trust the first proxy hop (reverse proxy / load balancer) so req.ip and
+// the rate limiter see the real client IP instead of the proxy's.
+app.set("trust proxy", 1);
+
+app.use(helmet());
+
+const allowedOrigins = (process.env.CORS_ORIGIN || "")
+  .split(",")
+  .map((origin) => origin.trim())
+  .filter(Boolean);
+
+app.use(
+  cors({
+    origin(origin, callback) {
+      // Allow same-origin/non-browser requests (no Origin header) and any
+      // origin explicitly listed in CORS_ORIGIN. Reject everything else.
+      if (!origin || allowedOrigins.length === 0 || allowedOrigins.includes(origin)) {
+        return callback(null, true);
+      }
+      return callback(new Error("Not allowed by CORS"));
+    },
+  })
+);
+
+app.use(express.json({ limit: "10kb" }));
+
+const contactLimiter = rateLimit({
+  windowMs: 15 * 60 * 1000,
+  limit: 5,
+  standardHeaders: true,
+  legacyHeaders: false,
+  message: { error: "Too many messages sent. Please try again later." },
+});
 
 const PORT = process.env.PORT || 4000;
 const TO_EMAIL = process.env.TO_EMAIL || "atozweldbuild@gmail.com";
+const MAX_NAME_LENGTH = 100;
+const MAX_EMAIL_LENGTH = 200;
+const MAX_MESSAGE_LENGTH = 5000;
 
 function getTransporter() {
   if (!process.env.SMTP_HOST || !process.env.SMTP_USER || !process.env.SMTP_PASS) {
@@ -29,17 +66,27 @@ app.get("/api/health", (req, res) => {
   res.json({ status: "ok" });
 });
 
-app.post("/api/contact", async (req, res) => {
-  const { name, email, message } = req.body || {};
+app.post("/api/contact", contactLimiter, async (req, res) => {
+  const { name, email, message, company } = req.body || {};
 
-  if (!name || !name.trim()) {
-    return res.status(400).json({ error: "Name is required." });
+  // Honeypot field: only bots fill this in. Pretend success without sending mail.
+  if (company) {
+    return res.json({ success: true });
   }
-  if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+
+  if (!name || !name.trim() || name.trim().length > MAX_NAME_LENGTH) {
+    return res.status(400).json({ error: "A valid name is required." });
+  }
+  if (
+    !email ||
+    email.length > MAX_EMAIL_LENGTH ||
+    !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email) ||
+    /[\r\n]/.test(email)
+  ) {
     return res.status(400).json({ error: "A valid email is required." });
   }
-  if (!message || !message.trim()) {
-    return res.status(400).json({ error: "Message is required." });
+  if (!message || !message.trim() || message.trim().length > MAX_MESSAGE_LENGTH) {
+    return res.status(400).json({ error: "A valid message is required." });
   }
 
   const transporter = getTransporter();
@@ -52,12 +99,15 @@ app.post("/api/contact", async (req, res) => {
     });
   }
 
+  // Strip CR/LF before interpolating into headers to prevent header injection.
+  const safeName = name.replace(/[\r\n]/g, " ").trim();
+
   try {
     await transporter.sendMail({
-      from: `"FD Welding Website" <${process.env.SMTP_USER}>`,
+      from: `"A To Z Weld & Build Website" <${process.env.SMTP_USER}>`,
       to: TO_EMAIL,
       replyTo: email,
-      subject: `New contact form message from ${name}`,
+      subject: `New contact form message from ${safeName}`,
       text: `Name: ${name}\nEmail: ${email}\n\nMessage:\n${message}`,
       html: `
         <p><strong>Name:</strong> ${escapeHtml(name)}</p>
@@ -83,5 +133,5 @@ function escapeHtml(str) {
 }
 
 app.listen(PORT, () => {
-  console.log(`FD Welding contact server running on port ${PORT}`);
+  console.log(`A To Z Weld & Build contact server running on port ${PORT}`);
 });

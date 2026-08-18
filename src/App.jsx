@@ -34,12 +34,13 @@ const GALLERY = [
   },
 ]
 
-const EMPTY_FORM = { name: '', email: '', message: '' }
+const EMPTY_FORM = { name: '', email: '', message: '', company: '' }
 
 function App() {
   const [form, setForm] = useState(EMPTY_FORM)
   const [status, setStatus] = useState('idle') // idle | sending | success | error
   const [errorMessage, setErrorMessage] = useState('')
+  const [navOpen, setNavOpen] = useState(false)
 
   function handleChange(e) {
     const { name, value } = e.target
@@ -48,6 +49,14 @@ function App() {
 
   async function handleSubmit(e) {
     e.preventDefault()
+
+    // Honeypot: real users never fill this hidden field, bots often do.
+    if (form.company) {
+      setStatus('success')
+      setForm(EMPTY_FORM)
+      return
+    }
+
     setStatus('sending')
     setErrorMessage('')
 
@@ -75,20 +84,32 @@ function App() {
     <div className="app">
       <header className="header">
         <nav className="nav">
-          <div className="logo">FD Welding</div>
-          <ul className="nav-links">
-            <li><a href="#services">Services</a></li>
-            <li><a href="#about">About</a></li>
-            <li><a href="#work">Our Work</a></li>
-            <li><a href="#contact">Contact</a></li>
+          <div className="logo">A To Z Weld &amp; Build</div>
+          <button
+            type="button"
+            className="nav-toggle"
+            aria-expanded={navOpen}
+            aria-controls="primary-nav"
+            aria-label={navOpen ? 'Close menu' : 'Open menu'}
+            onClick={() => setNavOpen((open) => !open)}
+          >
+            <span className="nav-toggle-bar" />
+            <span className="nav-toggle-bar" />
+            <span className="nav-toggle-bar" />
+          </button>
+          <ul id="primary-nav" className={`nav-links${navOpen ? ' nav-links--open' : ''}`}>
+            <li><a href="#services" onClick={() => setNavOpen(false)}>Services</a></li>
+            <li><a href="#about" onClick={() => setNavOpen(false)}>About</a></li>
+            <li><a href="#work" onClick={() => setNavOpen(false)}>Our Work</a></li>
+            <li><a href="#contact" onClick={() => setNavOpen(false)}>Contact</a></li>
           </ul>
         </nav>
       </header>
 
       <main>
         <section className="hero">
-          <h1>Professional Welding Services</h1>
-          <p>Quality craftsmanship you can count on.</p>
+          <h1>A To Z Weld &amp; Build</h1>
+          <p>25+ years of quality craftsmanship — residential &amp; commercial.</p>
           <a href="#contact" className="btn">Get a Quote</a>
         </section>
 
@@ -96,23 +117,39 @@ function App() {
           <h2>Our Services</h2>
           <div className="grid">
             <div className="card">
-              <h3>MIG Welding</h3>
-              <p>Fast and efficient welding for structural and fabrication work.</p>
+              <h3>Custom Welding</h3>
+              <p>Skilled welding tailored to your exact specifications — structural, decorative, and everything in between.</p>
             </div>
             <div className="card">
-              <h3>TIG Welding</h3>
-              <p>Precision welding for thin metals and detailed work.</p>
+              <h3>Glass Railing</h3>
+              <p>Sleek, modern glass railing systems for stairs, balconies, and decks — designed for safety and style.</p>
             </div>
             <div className="card">
-              <h3>Custom Fabrication</h3>
-              <p>Bespoke metal fabrication built to your specs.</p>
+              <h3>Metal Fabrication</h3>
+              <p>Stainless steel, aluminum, and custom metal fabrication built to last for residential and commercial clients.</p>
+            </div>
+            <div className="card">
+              <h3>Custom Gates &amp; Railings</h3>
+              <p>Handcrafted gates and railings built to your design, plus expert repair service on existing installations.</p>
+            </div>
+            <div className="card">
+              <h3>Home Renovation &amp; Repairs</h3>
+              <p>Full-service home renovation metalwork and structural repairs — done right the first time.</p>
+            </div>
+            <div className="card">
+              <h3>Maintenance</h3>
+              <p>Ongoing maintenance programs to keep your metalwork, railings, and gates in peak condition year-round.</p>
             </div>
           </div>
         </section>
 
         <section id="about" className="section section--alt">
           <h2>About Us</h2>
-          <p>With years of experience in the industry, FD Welding delivers reliable, high-quality metalwork for residential, commercial, and industrial clients.</p>
+          <div className="about-body">
+            <p>A To Z Weld &amp; Build has been delivering exceptional metalwork and fabrication for over <strong>25 years</strong>. What started as a passion for the craft has grown into a trusted name across the residential and commercial construction industry. Our team brings decades of hands-on experience to every project — no job is too big or too small.</p>
+            <p>Over the years we've had the privilege of working with a wide range of clients and industries. From franchise food service — including projects with <strong>Five Guys</strong> — to <strong>senior living homes</strong>, <strong>schools</strong>, <strong>daycares</strong>, and large-scale <strong>commercial apartment buildings</strong>, we understand that each environment comes with its own standards, timelines, and expectations. We take pride in meeting all of them.</p>
+            <p>Whether it's a set of custom glass railings for a luxury condo, a security gate for a commercial property, or routine maintenance for an institutional facility, A To Z Weld &amp; Build brings the same commitment to quality and craftsmanship to every job site. Our reputation is built on reliability, attention to detail, and work that stands the test of time.</p>
+          </div>
         </section>
 
         <section id="work" className="section">
@@ -129,49 +166,98 @@ function App() {
 
         <section id="contact" className="section">
           <h2>Contact Us</h2>
-          <form className="form" onSubmit={handleSubmit}>
-            <input
-              type="text"
-              name="name"
-              placeholder="Your Name"
-              value={form.name}
-              onChange={handleChange}
-              required
-            />
-            <input
-              type="email"
-              name="email"
-              placeholder="Your Email"
-              value={form.email}
-              onChange={handleChange}
-              required
-            />
-            <textarea
-              name="message"
-              placeholder="Your Message"
-              rows="5"
-              value={form.message}
-              onChange={handleChange}
-              required
-            ></textarea>
-            <button type="submit" className="btn" disabled={status === 'sending'}>
-              {status === 'sending' ? 'Sending...' : 'Send Message'}
-            </button>
+          <div className="contact-layout">
+            <div className="contact-info">
+              <div className="contact-item">
+                <span className="contact-label">Phone</span>
+                <a href="tel:+14168438036">Fahd: (416) 843-8036</a>
+              </div>
+              <div className="contact-item">
+                <span className="contact-label">Email</span>
+                <a href="mailto:atozweldbuild@gmail.com">atozweldbuild@gmail.com</a>
+              </div>
+              <div className="contact-item">
+                <span className="contact-label">Address</span>
+                <address>
+                  1565 Britannia Rd E, Unit 43<br />
+                  Mississauga, ON L4W 2V6
+                </address>
+              </div>
+            </div>
 
-            {status === 'success' && (
-              <p className="form-status form-status--success">
-                Thanks! Your message has been sent — we'll be in touch soon.
-              </p>
-            )}
-            {status === 'error' && (
-              <p className="form-status form-status--error">{errorMessage}</p>
-            )}
-          </form>
+            <form className="form" onSubmit={handleSubmit} noValidate>
+              <div className="form-honeypot" aria-hidden="true">
+                <label htmlFor="company">Company</label>
+                <input
+                  type="text"
+                  id="company"
+                  name="company"
+                  tabIndex={-1}
+                  autoComplete="off"
+                  value={form.company}
+                  onChange={handleChange}
+                />
+              </div>
+
+              <label className="visually-hidden" htmlFor="name">Your Name</label>
+              <input
+                type="text"
+                id="name"
+                name="name"
+                placeholder="Your Name"
+                value={form.name}
+                onChange={handleChange}
+                maxLength={100}
+                autoComplete="name"
+                required
+              />
+              <label className="visually-hidden" htmlFor="email">Your Email</label>
+              <input
+                type="email"
+                id="email"
+                name="email"
+                placeholder="Your Email"
+                value={form.email}
+                onChange={handleChange}
+                maxLength={200}
+                autoComplete="email"
+                required
+              />
+              <label className="visually-hidden" htmlFor="message">Your Message</label>
+              <textarea
+                id="message"
+                name="message"
+                placeholder="Your Message"
+                rows="5"
+                value={form.message}
+                onChange={handleChange}
+                maxLength={5000}
+                required
+              ></textarea>
+              <button type="submit" className="btn" disabled={status === 'sending'}>
+                {status === 'sending' ? 'Sending...' : 'Send Message'}
+              </button>
+
+              {status === 'success' && (
+                <p className="form-status form-status--success">
+                  Thanks! Your message has been sent — we'll be in touch soon.
+                </p>
+              )}
+              {status === 'error' && (
+                <p className="form-status form-status--error">{errorMessage}</p>
+              )}
+            </form>
+          </div>
         </section>
       </main>
 
       <footer className="footer">
-        <p>&copy; {new Date().getFullYear()} FD Welding. All rights reserved.</p>
+        <p>&copy; {new Date().getFullYear()} A To Z Weld &amp; Build. All rights reserved.</p>
+        <p className="footer-contact">
+          <a href="tel:+14168438036">(416) 843-8036</a> &nbsp;·&nbsp;
+          <a href="mailto:atozweldbuild@gmail.com">atozweldbuild@gmail.com</a> &nbsp;·&nbsp;
+          1565 Britannia Rd E, Unit 43, Mississauga, ON L4W 2V6
+        </p>
       </footer>
     </div>
   )
