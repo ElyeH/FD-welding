@@ -8,7 +8,7 @@ services:
     startCommand: npm start
     envVars:
       - key: TO_EMAIL
-        value: atozweldbuild@gmail.com
+        value: atozweldbulidcontact@gmail.com
       - key: SMTP_HOST
         value: smtp.gmail.com
       - key: SMTP_PORT

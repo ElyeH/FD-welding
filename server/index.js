@@ -42,7 +42,7 @@ const contactLimiter = rateLimit({
 });
 
 const PORT = process.env.PORT || 4000;
-const TO_EMAIL = process.env.TO_EMAIL || "atozweldbuild@gmail.com";
+const TO_EMAIL = process.env.TO_EMAIL || "atozweldbulidcontact@gmail.com";
 const MAX_NAME_LENGTH = 100;
 const MAX_EMAIL_LENGTH = 200;
 const MAX_MESSAGE_LENGTH = 5000;

@@ -32,7 +32,7 @@ Runs on http://localhost:5173 and proxies `/api` requests to the backend.
 
 ## Configuring the mailer
 
-Contact form messages are sent to the address set in `TO_EMAIL` (defaults to `atozweldbuild@gmail.com`). To actually send mail, `server/.env` needs real SMTP credentials:
+Contact form messages are sent to the address set in `TO_EMAIL` (defaults to `atozweldbulidcontact@gmail.com`). To actually send mail, `server/.env` needs real SMTP credentials:
 
 - **Using Gmail as the sender:** enable 2-Step Verification on the sending Gmail account, then create an [App Password](https://myaccount.google.com/apppasswords) and use it as `SMTP_PASS`.
 - Any SMTP provider works (Gmail, SendGrid, Mailgun, etc.) — just fill in `SMTP_HOST`, `SMTP_PORT`, `SMTP_USER`, `SMTP_PASS` in `.env`.
