@@ -10,7 +10,7 @@ const GALLERY = [
   {
     src: glassStairRailing,
     alt: 'Finished glass and stainless steel staircase railing in an office lobby',
-    caption: 'Glass & stainless stair railing — commercial lobby',
+    caption: 'Glass & stainless stair railing, commercial lobby',
   },
   {
     src: stairwellWelding,
@@ -20,12 +20,12 @@ const GALLERY = [
   {
     src: handrailFrame,
     alt: 'Stainless steel handrail frame staged for installation',
-    caption: 'Custom handrail frame — fit-up',
+    caption: 'Custom handrail frame fit-up',
   },
   {
     src: kitchenHood,
-    alt: 'On-site metal fabrication work',
-    caption: '',
+    alt: 'Custom stainless steel staircase railing',
+    caption: 'Custom staircase railing',
   },
   {
     src: demoWall,
