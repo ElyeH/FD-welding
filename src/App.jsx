@@ -114,7 +114,7 @@ function App() {
       <main>
         <section className="hero">
           <h1>A To Z Weld &amp; Build</h1>
-          <p>25+ years of quality craftsmanship — residential &amp; commercial.</p>
+          <p>25+ years of quality craftsmanship, residential &amp; commercial.</p>
           <a href="#contact" className="btn">Get a Quote</a>
         </section>
 
@@ -123,11 +123,11 @@ function App() {
           <div className="grid">
             <div className="card">
               <h3>Custom Welding</h3>
-              <p>Skilled welding tailored to your exact specifications — structural, decorative, and everything in between.</p>
+              <p>Skilled welding tailored to your exact specifications: structural, decorative, and everything in between.</p>
             </div>
             <div className="card">
               <h3>Glass Railing</h3>
-              <p>Sleek, modern glass railing systems for stairs, balconies, and decks — designed for safety and style.</p>
+              <p>Sleek, modern glass railing systems for stairs, balconies, and decks, designed for safety and style.</p>
             </div>
             <div className="card">
               <h3>Metal Fabrication</h3>
@@ -139,7 +139,7 @@ function App() {
             </div>
             <div className="card">
               <h3>Home Renovation &amp; Repairs</h3>
-              <p>Full-service home renovation metalwork and structural repairs — done right the first time.</p>
+              <p>Full-service home renovation metalwork and structural repairs, done right the first time.</p>
             </div>
             <div className="card">
               <h3>Maintenance</h3>
@@ -151,8 +151,8 @@ function App() {
         <section id="about" className="section section--alt">
           <h2>About Us</h2>
           <div className="about-body">
-            <p>A To Z Weld &amp; Build has been delivering exceptional metalwork and fabrication for over <strong>25 years</strong>. What started as a passion for the craft has grown into a trusted name across the residential and commercial construction industry. Our team brings decades of hands-on experience to every project — no job is too big or too small.</p>
-            <p>Over the years we've had the privilege of working with a wide range of clients and industries. From franchise food service — including projects with <strong>Five Guys</strong> — to <strong>senior living homes</strong>, <strong>schools</strong>, <strong>daycares</strong>, and large-scale <strong>commercial apartment buildings</strong>, we understand that each environment comes with its own standards, timelines, and expectations. We take pride in meeting all of them.</p>
+            <p>A To Z Weld &amp; Build has been delivering exceptional metalwork and fabrication for over <strong>25 years</strong>. What started as a passion for the craft has grown into a trusted name across the residential and commercial construction industry. Our team brings decades of hands-on experience to every project. No job is too big or too small.</p>
+            <p>Over the years we've had the privilege of working with a wide range of clients and industries. From franchise food service, including projects with <strong>Five Guys</strong>, to <strong>senior living homes</strong>, <strong>schools</strong>, <strong>daycares</strong>, and large-scale <strong>commercial apartment buildings</strong>, we understand that each environment comes with its own standards, timelines, and expectations. We take pride in meeting all of them.</p>
             <p>Whether it's a set of custom glass railings for a luxury condo, a security gate for a commercial property, or routine maintenance for an institutional facility, A To Z Weld &amp; Build brings the same commitment to quality and craftsmanship to every job site. Our reputation is built on reliability, attention to detail, and work that stands the test of time.</p>
           </div>
         </section>
@@ -245,7 +245,7 @@ function App() {
 
               {status === 'success' && (
                 <p className="form-status form-status--success">
-                  Thanks! Your message has been sent — we'll be in touch soon.
+                  Thanks! Your message has been sent. We'll be in touch soon.
                 </p>
               )}
               {status === 'error' && (
