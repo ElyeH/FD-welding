@@ -24,8 +24,8 @@ const GALLERY = [
   },
   {
     src: kitchenHood,
-    alt: 'Fabricating a stainless steel commercial kitchen hood surround',
-    caption: 'Stainless kitchen hood fabrication',
+    alt: 'On-site metal fabrication work',
+    caption: '',
   },
   {
     src: demoWall,
@@ -163,7 +163,7 @@ function App() {
             {GALLERY.map((item) => (
               <figure className="gallery-item" key={item.src}>
                 <img src={item.src} alt={item.alt} loading="lazy" />
-                <figcaption>{item.caption}</figcaption>
+                {item.caption && <figcaption>{item.caption}</figcaption>}
               </figure>
             ))}
           </div>
